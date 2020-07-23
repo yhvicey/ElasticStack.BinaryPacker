@@ -1,0 +1,10 @@
+<Project>
+    <Import Project="../../Directory.Build.props" />
+
+    <PropertyGroup>
+        <BinaryPackageNameTemplate>filebeat-{BinaryOS}-{BinaryPlatform}</BinaryPackageNameTemplate>
+        <BinaryPackageVersionTemplate>{BinaryVersion}</BinaryPackageVersionTemplate>
+        <BinaryDownloadUrlTemplate>https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{BinaryVersion}-{BinaryOS}-{BinaryPlatform}.zip</BinaryDownloadUrlTemplate>
+    </PropertyGroup>
+
+</Project>

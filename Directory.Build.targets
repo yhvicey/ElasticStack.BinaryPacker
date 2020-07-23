@@ -1,0 +1,5 @@
+<Project>
+
+    <Import Project="targets/BinaryPacker.targets" Condition=" '$(MSBuildProjectFile)' != 'dirs.proj' " />
+
+</Project>

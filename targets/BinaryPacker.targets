@@ -1,0 +1,108 @@
+<Project>
+
+    <PropertyGroup>
+        <BinaryDownloadUrl Condition=" '$(BinaryDownloadUrl)' == '' ">$(BinaryDownloadUrlTemplate)</BinaryDownloadUrl>
+        <BinaryPackageName Condition=" '$(BinaryPackageName)' == '' ">$(BinaryPackageNameTemplate)</BinaryPackageName>
+        <BinaryPackageVersion Condition=" '$(BinaryPackageVersion)' == '' ">$(BinaryPackageVersionTemplate)</BinaryPackageVersion>
+    </PropertyGroup>
+
+    <!-- Resolve binary download url -->
+    <PropertyGroup>
+        <BinaryDownloadUrl>$(BinaryDownloadUrl.Replace('{BinaryOS}', $(BinaryOS)))</BinaryDownloadUrl>
+        <BinaryDownloadUrl>$(BinaryDownloadUrl.Replace('{BinaryPlatform}', $(BinaryPlatform)))</BinaryDownloadUrl>
+        <BinaryDownloadUrl>$(BinaryDownloadUrl.Replace('{BinaryVersion}', $(BinaryVersion)))</BinaryDownloadUrl>
+    </PropertyGroup>
+
+    <!-- Resolve package name -->
+    <PropertyGroup>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryOS}', $(BinaryOS)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPlatform}', $(BinaryPlatform)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryVersion}', $(BinaryVersion)))</BinaryPackageName>
+    </PropertyGroup>
+
+    <!-- Resolve package version -->
+    <PropertyGroup>
+        <BinaryPackageVersion>$(BinaryPackageVersion.Replace('{BinaryOS}', $(BinaryOS)))</BinaryPackageVersion>
+        <BinaryPackageVersion>$(BinaryPackageVersion.Replace('{BinaryPlatform}', $(BinaryPlatform)))</BinaryPackageVersion>
+        <BinaryPackageVersion>$(BinaryPackageVersion.Replace('{BinaryVersion}', $(BinaryVersion)))</BinaryPackageVersion>
+    </PropertyGroup>
+
+    <!-- NuGet package props -->
+    <PropertyGroup>
+        <PackageId>$(BinaryPackageName)</PackageId>
+        <Version>$(BinaryPackageVersion)</Version>
+        <IsTool>True</IsTool>
+    </PropertyGroup>
+    
+    <!-- Task props -->
+    <PropertyGroup>
+        <LocalFileName>$([System.IO.Path]::GetFileName($(BinaryDownloadUrl)))</LocalFileName>
+        <LocalFileNameWithoutExtension>$([System.IO.Path]::GetFileNameWithoutExtension($(BinaryDownloadUrl)))</LocalFileNameWithoutExtension>
+        <NestedPackageFolderName Condition=" '$(NestedPackageFolderName)' == '' ">$(LocalFileNameWithoutExtension)</NestedPackageFolderName>
+        <LocalFilePath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(LocalFileName)))</LocalFilePath>
+        <UnpackFolderPath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(BinaryPackageName)))</UnpackFolderPath>
+    </PropertyGroup>
+
+    <Target Name="Validation" AfterTargets="Build">
+        <Message Text="Validating properties..." Importance="High" />
+        <Error
+            Code="InvalidBinaryDownloadUrl"
+            Text="Binary download url is empty."
+            Condition=" '$(BinaryDownloadUrl)' == '' ">
+        </Error>
+        <Message Text="Validation done." Importance="High" />
+    </Target>
+
+    <Target Name="DownloadPackage" AfterTargets="Validation">
+        <Message Text="Downloading binary package from $(BinaryDownloadUrl)..." Importance="High" />
+        <!-- Download to local file -->
+        <DownloadFile
+            SourceUrl="$(BinaryDownloadUrl)"
+            DestinationFolder="$(IntermediateOutputPath)"
+            DestinationFileName="$(LocalFileName)"
+            Retries="3">
+        </DownloadFile>
+        <Error
+            Code="FailedToDownloadFile"
+            Text="Failde to download binary from $(BinaryDownloadUrl)"
+            Condition=" !EXISTS('$(LocalFilePath)') ">
+        </Error>
+        <Message Text="Binary package downloaded to $(LocalFilePath)." Importance="High" />
+    </Target>
+
+    <Target Name="UnpackDownloadedPackage" AfterTargets="DownloadPackage">
+        <Message Text="Unpacking binary package $(LocalFilePath)..." Importance="High" />
+        <ItemGroup>
+            <DownloadedPackage Include="$(LocalFilePath)" />
+            <UnpackFolder Include="$(UnpackFolderPath)" />
+        </ItemGroup>
+        <!-- Clear existing folder -->
+        <RemoveDir
+            Directories="@(UnpackFolder)">
+        </RemoveDir>
+        <!-- Unpack downloaded archieve file -->
+        <Unzip
+            SourceFiles="@(DownloadedPackage)"
+            DestinationFolder="@(UnpackFolder)">
+        </Unzip>
+        <Message Text="Binary package unpacked to $(UnpackFolderPath)." Importance="High" />
+    </Target>
+
+    <Target Name="GetFilesToPack" AfterTargets="UnpackDownloadedPackage" Returns="@(FilesToPack)">
+        <ItemGroup>
+            <FilesToPack Include="$(UnpackFolderPath)/**" Condition=" '$(IsNestedPackage)' != 'True' " />
+            <!-- Handle nested zip package -->
+            <FilesToPack Include="$([System.IO.Path]::Combine($(UnpackFolderPath), $(NestedPackageFolderName)))/**" Condition=" '$(IsNestedPackage)' == 'True' " />
+        </ItemGroup>
+    </Target>
+
+    <Target Name="PrepareNuGetPackage" AfterTargets="GetFilesToPack" BeforeTargets="Pack">
+        <ItemGroup>
+            <Content Include="@(FilesToPack)">
+                <Pack>True</Pack>
+                <PackagePath>tools\</PackagePath>
+            </Content>
+        </ItemGroup>
+    </Target>
+
+</Project>
