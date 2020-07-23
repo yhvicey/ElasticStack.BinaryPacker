@@ -17,15 +17,13 @@ jobs:
         dotnet-version: 3.1.301
     - name: Build Packages
       run: dotnet build dirs.proj
-    - name: Print Current ref
-      run: echo ${{ github.ref }}
     - name: Setup NuGet.exe
-      if: github.event == 'push' && github.ref == 'master'
+      if: github.event == 'push' && github.ref == 'refs/heads/master'
       uses: NuGet/setup-nuget@v1.0.2
       with:
         nuget-api-key: ${{ secrets.NUGET_API_KEY }}
     - name: Push Built Packages
-      if: github.event == 'push' && github.ref == 'master'
+      if: github.event == 'push' && github.ref == 'refs/heads/master'
       shell: pwsh
       run: |
         Get-ChildItem "out/packages" -Filter "*.nupkg" | ForEach-Object {
