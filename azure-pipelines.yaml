@@ -1,0 +1,60 @@
+# Parameters
+parameters:
+  - name: Verbosity
+    default: Minimal
+    values:
+      - Quiet
+      - Minimal
+      - Normal
+      - Detailed
+      - Diagnostic
+
+# CI triggers
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+
+pool:
+  vmImage: "ubuntu-16.04"
+
+# Variables
+variables:
+  # Parameters
+  Verbosity: ${{ parameters.Verbosity }}
+  # Paths
+  RootPath: $(System.DefaultWorkingDirectory)
+  RootProject: $(RootPath)/dirs.proj
+  OutputFolder: $(RootPath)/out
+  PackagesOutputFolder: $(OutputFolder)/packages
+  # MSBuild-related props
+  BuildConfiguration: Release
+  DotNetCoreVersion: 3.1.100
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Skip caching packages
+
+steps:
+  - task: UseDotNet@2
+    displayName: "Install dotnet Sdk"
+    enabled: false
+    inputs:
+      packageType: "sdk"
+      version: $(DotNetCoreVersion)
+
+  # Build
+  - task: DotNetCoreCLI@2
+    displayName: Build Packages
+    inputs:
+      command: build
+      projects: $(RootProject)
+      arguments: "--configuration $(BuildConfiguration) --verbosity $(Verbosity)"
+
+  # Publish - TODO: Should this step be splitted as CD?
+  - task: NuGetCommand@2
+    displayName: Publish Packages
+    condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')) # Only trigger package publishing in CI build
+    inputs:
+      command: 'push'
+      packagesToPush: '$(PackagesOutputFolder)/*.nupkg'
+      nuGetFeedType: 'external'
+      publishFeedCredentials: 'NuGet.org'
