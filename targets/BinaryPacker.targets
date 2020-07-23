@@ -1,30 +1,24 @@
 <Project>
 
     <PropertyGroup>
-        <BinaryDownloadUrl Condition=" '$(BinaryDownloadUrl)' == '' ">$(BinaryDownloadUrlTemplate)</BinaryDownloadUrl>
+        <BinaryPackageDownloadUrl Condition=" '$(BinaryPackageDownloadUrl)' == '' ">$(BinaryPackageDownloadUrlTemplate)</BinaryPackageDownloadUrl>
         <BinaryPackageName Condition=" '$(BinaryPackageName)' == '' ">$(BinaryPackageNameTemplate)</BinaryPackageName>
-        <BinaryPackageVersion Condition=" '$(BinaryPackageVersion)' == '' ">$(BinaryPackageVersionTemplate)</BinaryPackageVersion>
     </PropertyGroup>
 
     <!-- Resolve binary download url -->
     <PropertyGroup>
-        <BinaryDownloadUrl>$(BinaryDownloadUrl.Replace('{BinaryOS}', $(BinaryOS)))</BinaryDownloadUrl>
-        <BinaryDownloadUrl>$(BinaryDownloadUrl.Replace('{BinaryPlatform}', $(BinaryPlatform)))</BinaryDownloadUrl>
-        <BinaryDownloadUrl>$(BinaryDownloadUrl.Replace('{BinaryVersion}', $(BinaryVersion)))</BinaryDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageOS}', $(BinaryPackageOS)))</BinaryPackageDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackagePlatform}', $(BinaryPackagePlatform)))</BinaryPackageDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageVersion}', $(BinaryPackageVersion)))</BinaryPackageDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</BinaryPackageDownloadUrl>
     </PropertyGroup>
 
     <!-- Resolve package name -->
     <PropertyGroup>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryOS}', $(BinaryOS)))</BinaryPackageName>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPlatform}', $(BinaryPlatform)))</BinaryPackageName>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryVersion}', $(BinaryVersion)))</BinaryPackageName>
-    </PropertyGroup>
-
-    <!-- Resolve package version -->
-    <PropertyGroup>
-        <BinaryPackageVersion>$(BinaryPackageVersion.Replace('{BinaryOS}', $(BinaryOS)))</BinaryPackageVersion>
-        <BinaryPackageVersion>$(BinaryPackageVersion.Replace('{BinaryPlatform}', $(BinaryPlatform)))</BinaryPackageVersion>
-        <BinaryPackageVersion>$(BinaryPackageVersion.Replace('{BinaryVersion}', $(BinaryVersion)))</BinaryPackageVersion>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageOS}', $(BinaryPackageOS)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackagePlatform}', $(BinaryPackagePlatform)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageVersion}', $(BinaryPackageVersion)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</BinaryPackageName>
     </PropertyGroup>
 
     <!-- NuGet package props -->
@@ -36,30 +30,30 @@
     
     <!-- Task props & items -->
     <PropertyGroup>
-        <LocalFileName>$([System.IO.Path]::GetFileName($(BinaryDownloadUrl)))</LocalFileName>
-        <LocalFileNameWithoutExtension>$(LocalFileName.Replace('.zip', '').Replace('.tar', '').Replace('.gz', ''))</LocalFileNameWithoutExtension>
+        <LocalFileName>$([System.IO.Path]::GetFileName($(BinaryPackageDownloadUrl)))</LocalFileName>
+        <LocalFileNameWithoutExtension>$(LocalFileName.Replace('$(BinaryPackageExtension)', ''))</LocalFileNameWithoutExtension>
         <NestedPackageFolderName Condition=" '$(NestedPackageFolderName)' == '' ">$(LocalFileNameWithoutExtension)</NestedPackageFolderName>
         <LocalFilePath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(LocalFileName)))</LocalFilePath>
         <UnpackFolderPath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(LocalFileNameWithoutExtension)))</UnpackFolderPath>
     </PropertyGroup>
     
     <Choose>
-        <When Condition=" $(LocalFileName.EndsWith('.zip')) ">
+        <When Condition=" '$(BinaryPackageExtension)' == '.zip' ">
             <PropertyGroup>
                 <UnPackTargetName>UnPackZipFile</UnPackTargetName>
             </PropertyGroup>
         </When>
-        <When Condition=" $(LocalFileName.EndsWith('.tar.gz')) ">
+        <When Condition=" '$(BinaryPackageExtension)' == '.tar.gz' ">
             <PropertyGroup>
                 <UnPackTargetName>UnPackTarGzFile</UnPackTargetName>
             </PropertyGroup>
         </When>
-        <When Condition=" $(LocalFileName.EndsWith('.tar.bz2')) ">
+        <When Condition=" '$(BinaryPackageExtension)' == '.tar.bz2' ">
             <PropertyGroup>
                 <UnPackTargetName>UnPackTarBz2File</UnPackTargetName>
             </PropertyGroup>
         </When>
-        <When Condition=" $(LocalFileName.EndsWith('.tar')) ">
+        <When Condition=" '$(BinaryPackageExtension)' == '.tar' ">
             <PropertyGroup>
                 <UnPackTargetName>UnPackTarFile</UnPackTargetName>
             </PropertyGroup>
@@ -83,23 +77,23 @@
         <Error
             Code="InvalidBinaryDownloadUrl"
             Text="Binary download url is empty."
-            Condition=" '$(BinaryDownloadUrl)' == '' ">
+            Condition=" '$(BinaryPackageDownloadUrl)' == '' ">
         </Error>
         <Message Text="Validation done." Importance="High" />
     </Target>
 
     <Target Name="DownloadPackage" AfterTargets="Validation">
-        <Message Text="Downloading binary package from $(BinaryDownloadUrl)..." Importance="High" />
+        <Message Text="Downloading binary package from $(BinaryPackageDownloadUrl)..." Importance="High" />
         <!-- Download to local file -->
         <DownloadFile
-            SourceUrl="$(BinaryDownloadUrl)"
+            SourceUrl="$(BinaryPackageDownloadUrl)"
             DestinationFolder="$(IntermediateOutputPath)"
             DestinationFileName="$(LocalFileName)"
             Retries="3">
         </DownloadFile>
         <Error
             Code="FailedToDownloadFile"
-            Text="Failde to download binary from $(BinaryDownloadUrl)"
+            Text="Failde to download binary from $(BinaryPackageDownloadUrl)"
             Condition=" !EXISTS('$(LocalFilePath)') ">
         </Error>
         <Message Text="Binary package downloaded to $(LocalFilePath)." Importance="High" />

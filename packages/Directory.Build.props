@@ -26,9 +26,4 @@
         <NoWarn>$(NoWarn),NU5128</NoWarn> <!-- This package is not aimed for referencing -->
     </PropertyGroup>
 
-    <!-- Common package props -->
-    <PropertyGroup>
-        <BinaryPackageVersionTemplate>{BinaryVersion}</BinaryPackageVersionTemplate>
-    </PropertyGroup>
-
 </Project>
