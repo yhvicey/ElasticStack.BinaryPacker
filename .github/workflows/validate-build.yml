@@ -1,4 +1,4 @@
-name: .NET Core
+name: Validate Build
 
 on:
   push:
@@ -19,8 +19,3 @@ jobs:
         dotnet-version: 3.1.301
     - name: Build Packages
       run: dotnet build dirs.proj
-    - name: Upload Packed Packages
-      uses: actions/upload-artifact@v2
-      with:
-        name: Packages
-        path: out/packages/**
