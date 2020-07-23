@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.Build.Traversal">
 
     <ItemGroup>
+        <ProjectReference Include="src/ElasticStack.BinaryPacker.Tasks/ElasticStack.BinaryPacker.Tasks.csproj" />
         <ProjectReference Include="packages/dirs.proj" />
     </ItemGroup>
 

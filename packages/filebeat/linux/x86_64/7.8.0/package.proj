@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.Build.NoTargets">
+
+    <PropertyGroup>
+        <BinaryVersion>7.8.0</BinaryVersion>
+        <BinaryOS>linux</BinaryOS>
+        <BinaryPlatform>x86_64</BinaryPlatform>
+        <IsNestedPackage>True</IsNestedPackage>
+    </PropertyGroup>
+    
+</Project>

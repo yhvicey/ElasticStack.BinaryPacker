@@ -1,0 +1,34 @@
+<Project>
+    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., Directory.Build.props))/Directory.Build.props" />
+
+    <!-- Common build props -->
+    <PropertyGroup>
+        <TargetFramework>netstandard1.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <!-- Common NuGet package props -->
+    <PropertyGroup>
+        <Authors>ElasticStackBinaryPacker</Authors>
+        <Company>ElasticStackBinaryPacker</Company>
+        <Description>Binary packages for ElasticStack components.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/yhvicey/ElasticStack.BinaryPacker</PackageProjectUrl>
+        <PackageTags>elastic elasticsearch elasticstack binary</PackageTags>
+        <RepositoryBranch>master</RepositoryBranch>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/yhvicey/ElasticStack.BinaryPacker</RepositoryUrl>
+    </PropertyGroup>
+
+    <!-- Disable specific warnings -->
+    <PropertyGroup>
+        <NoWarn>$(NoWarn),NU5111</NoWarn> <!-- Binary may contains non-standard powershell scripts -->
+        <NoWarn>$(NoWarn),NU5128</NoWarn> <!-- This package is not aimed for referencing -->
+    </PropertyGroup>
+
+    <!-- Common package props -->
+    <PropertyGroup>
+        <BinaryPackageVersionTemplate>{BinaryVersion}</BinaryPackageVersionTemplate>
+    </PropertyGroup>
+
+</Project>

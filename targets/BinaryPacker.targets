@@ -34,15 +34,50 @@
         <IsTool>True</IsTool>
     </PropertyGroup>
     
-    <!-- Task props -->
+    <!-- Task props & items -->
     <PropertyGroup>
         <LocalFileName>$([System.IO.Path]::GetFileName($(BinaryDownloadUrl)))</LocalFileName>
-        <LocalFileNameWithoutExtension>$([System.IO.Path]::GetFileNameWithoutExtension($(BinaryDownloadUrl)))</LocalFileNameWithoutExtension>
+        <LocalFileNameWithoutExtension>$(LocalFileName.Replace('.zip', '').Replace('.tar', '').Replace('.gz', ''))</LocalFileNameWithoutExtension>
         <NestedPackageFolderName Condition=" '$(NestedPackageFolderName)' == '' ">$(LocalFileNameWithoutExtension)</NestedPackageFolderName>
         <LocalFilePath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(LocalFileName)))</LocalFilePath>
-        <UnpackFolderPath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(BinaryPackageName)))</UnpackFolderPath>
+        <UnpackFolderPath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(LocalFileNameWithoutExtension)))</UnpackFolderPath>
     </PropertyGroup>
+    
+    <Choose>
+        <When Condition=" $(LocalFileName.EndsWith('.zip')) ">
+            <PropertyGroup>
+                <UnPackTargetName>UnPackZipFile</UnPackTargetName>
+            </PropertyGroup>
+        </When>
+        <When Condition=" $(LocalFileName.EndsWith('.tar.gz')) ">
+            <PropertyGroup>
+                <UnPackTargetName>UnPackTarGzFile</UnPackTargetName>
+            </PropertyGroup>
+        </When>
+        <When Condition=" $(LocalFileName.EndsWith('.tar.bz2')) ">
+            <PropertyGroup>
+                <UnPackTargetName>UnPackTarBz2File</UnPackTargetName>
+            </PropertyGroup>
+        </When>
+        <When Condition=" $(LocalFileName.EndsWith('.tar')) ">
+            <PropertyGroup>
+                <UnPackTargetName>UnPackTarFile</UnPackTargetName>
+            </PropertyGroup>
+        </When>
+    </Choose>
 
+    <!-- Custom tasks -->
+    <UsingTask 
+        TaskName="ElasticStack.BinaryPacker.Tasks.UnPackTar"
+        AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
+    <UsingTask 
+        TaskName="ElasticStack.BinaryPacker.Tasks.UnPackTarGz"
+        AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
+    <UsingTask 
+        TaskName="ElasticStack.BinaryPacker.Tasks.UnPackTarBz2"
+        AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
+
+    <!-- Targets -->
     <Target Name="Validation" AfterTargets="Build">
         <Message Text="Validating properties..." Importance="High" />
         <Error
@@ -70,22 +105,45 @@
         <Message Text="Binary package downloaded to $(LocalFilePath)." Importance="High" />
     </Target>
 
-    <Target Name="UnpackDownloadedPackage" AfterTargets="DownloadPackage">
+    <Target Name="UnpackDownloadedPackage" AfterTargets="DownloadPackage">        
         <Message Text="Unpacking binary package $(LocalFilePath)..." Importance="High" />
-        <ItemGroup>
-            <DownloadedPackage Include="$(LocalFilePath)" />
-            <UnpackFolder Include="$(UnpackFolderPath)" />
-        </ItemGroup>
         <!-- Clear existing folder -->
         <RemoveDir
-            Directories="@(UnpackFolder)">
+            Directories="$(LocalFilePath)">
         </RemoveDir>
         <!-- Unpack downloaded archieve file -->
-        <Unzip
-            SourceFiles="@(DownloadedPackage)"
-            DestinationFolder="@(UnpackFolder)">
-        </Unzip>
+        <CallTarget
+            Targets="$(UnPackTargetName)">
+        </CallTarget>
         <Message Text="Binary package unpacked to $(UnpackFolderPath)." Importance="High" />
+    </Target>
+
+    <Target Name="UnPackZipFile">
+        <Unzip
+            SourceFiles="$(LocalFilePath)"
+            DestinationFolder="$(UnpackFolderPath)">
+        </Unzip>
+    </Target>
+
+    <Target Name="UnPackTarFile">
+        <UnPackTar
+            SourceFiles="$(LocalFilePath)"
+            DestinationFolder="$(UnpackFolderPath)">
+        </UnPackTar>
+    </Target>
+
+    <Target Name="UnPackTarBz2File">
+        <UnPackTarBz2
+            SourceFiles="$(LocalFilePath)"
+            DestinationFolder="$(UnpackFolderPath)">
+        </UnPackTarBz2>
+    </Target>
+
+    <Target Name="UnPackTarGzFile">
+        <UnPackTarGz
+            SourceFiles="$(LocalFilePath)"
+            DestinationFolder="$(UnpackFolderPath)">
+        </UnPackTarGz>
     </Target>
 
     <Target Name="GetFilesToPack" AfterTargets="UnpackDownloadedPackage" Returns="@(FilesToPack)">

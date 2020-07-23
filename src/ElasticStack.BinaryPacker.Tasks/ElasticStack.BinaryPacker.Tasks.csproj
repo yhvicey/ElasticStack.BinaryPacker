@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.6.0" />
+    <PackageReference Include="SharpZipLib" Version="1.2.0" />
+  </ItemGroup>
+
+  <Target Name="CopyBuiltAssemblies" AfterTargets="Build">
+    <ItemGroup>
+      <BuiltFiles Include="$(OutputPath)/**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BuiltFiles)" DestinationFolder="$(TaskAssemblyOutputPath)">
+    </Copy>
+  </Target>
+
+</Project>

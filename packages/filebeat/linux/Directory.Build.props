@@ -2,7 +2,7 @@
     <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., Directory.Build.props))/Directory.Build.props" />
 
     <PropertyGroup>
-        <BinaryPackageNameTemplate>filebeat-{BinaryOS}-{BinaryPlatform}</BinaryPackageNameTemplate>
+        <BinaryDownloadUrlTemplate>https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{BinaryVersion}-{BinaryOS}-{BinaryPlatform}.tar.gz</BinaryDownloadUrlTemplate>
     </PropertyGroup>
 
 </Project>

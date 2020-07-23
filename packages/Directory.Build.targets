@@ -1,0 +1,13 @@
+<Project>
+    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., Directory.Build.targets))/Directory.Build.targets" />
+
+    <ItemGroup>
+        <!-- Make sure tasks project been built before any package project -->
+        <ProjectReference Include="$(EnlistmentRoot)src/ElasticStack.BinaryPacker.Tasks/ElasticStack.BinaryPacker.Tasks.csproj">        
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+        </ProjectReference>
+    </ItemGroup>
+
+    <Import Project="$(EnlistmentRoot)targets/BinaryPacker.targets" Condition=" '$(MSBuildProjectFile)' != 'dirs.proj' " />
+
+</Project>
