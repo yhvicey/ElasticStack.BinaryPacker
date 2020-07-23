@@ -18,7 +18,7 @@ jobs:
     - name: Build Packages
       run: dotnet build dirs.proj
     - name: Setup NuGet.exe
-      if: github.event == 'push' and github.ref == 'master'
+      if: github.event == 'push' && github.ref == 'master'
       uses: NuGet/setup-nuget@v1.0.2
       with:
         nuget-api-key: ${{ secrets.NUGET_API_KEY }}
