@@ -58,3 +58,4 @@ steps:
       packagesToPush: '$(PackagesOutputFolder)/*.nupkg'
       nuGetFeedType: 'external'
       publishFeedCredentials: 'NuGet.org'
+      allowPackageConflicts: true
