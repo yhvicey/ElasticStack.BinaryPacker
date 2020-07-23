@@ -75,9 +75,19 @@
     <Target Name="Validation" AfterTargets="Build">
         <Message Text="Validating properties..." Importance="High" />
         <Error
-            Code="InvalidBinaryDownloadUrl"
-            Text="Binary download url is empty."
+            Code="InvalidBinaryPackageDownloadUrl"
+            Text="Binary package download url is empty."
             Condition=" '$(BinaryPackageDownloadUrl)' == '' ">
+        </Error>
+        <Error
+            Code="InvalidBinaryPackageName"
+            Text="Binary package name is empty."
+            Condition=" '$(BinaryPackageName)' == '' ">
+        </Error>
+        <Error
+            Code="InvalidBinaryPackageVersion"
+            Text="Binary package version is empty."
+            Condition=" '$(BinaryPackageVersion)' == '' ">
         </Error>
         <Message Text="Validation done." Importance="High" />
     </Target>
