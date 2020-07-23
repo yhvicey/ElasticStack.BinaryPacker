@@ -17,7 +17,7 @@ trigger:
       - master
 
 pool:
-  vmImage: "ubuntu-16.04"
+  vmImage: "windows-latest"
 
 # Variables
 variables:
