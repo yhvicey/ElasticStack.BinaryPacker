@@ -1,33 +1,5 @@
 <Project>
 
-    <PropertyGroup>
-        <BinaryPackageDownloadUrl Condition=" '$(BinaryPackageDownloadUrl)' == '' ">$(BinaryPackageDownloadUrlTemplate)</BinaryPackageDownloadUrl>
-        <BinaryPackageName Condition=" '$(BinaryPackageName)' == '' ">$(BinaryPackageNameTemplate)</BinaryPackageName>
-    </PropertyGroup>
-
-    <!-- Resolve binary download url -->
-    <PropertyGroup>
-        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageOS}', $(BinaryPackageOS)))</BinaryPackageDownloadUrl>
-        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackagePlatform}', $(BinaryPackagePlatform)))</BinaryPackageDownloadUrl>
-        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageVersion}', $(BinaryPackageVersion)))</BinaryPackageDownloadUrl>
-        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</BinaryPackageDownloadUrl>
-    </PropertyGroup>
-
-    <!-- Resolve package name -->
-    <PropertyGroup>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageOS}', $(BinaryPackageOS)))</BinaryPackageName>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackagePlatform}', $(BinaryPackagePlatform)))</BinaryPackageName>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageVersion}', $(BinaryPackageVersion)))</BinaryPackageName>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</BinaryPackageName>
-    </PropertyGroup>
-
-    <!-- NuGet package props -->
-    <PropertyGroup>
-        <PackageId>$(BinaryPackageName)</PackageId>
-        <Version>$(BinaryPackageVersion)</Version>
-        <IsTool>True</IsTool>
-    </PropertyGroup>
-    
     <!-- Task props & items -->
     <PropertyGroup>
         <LocalFileName>$([System.IO.Path]::GetFileName($(BinaryPackageDownloadUrl)))</LocalFileName>
@@ -72,7 +44,9 @@
         AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
 
     <!-- Targets -->
-    <Target Name="Validation" AfterTargets="Build">
+    <Target Name="Validation"
+        AfterTargets="CheckIfShoudPackPacakge"
+        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
         <Message Text="Validating properties..." Importance="High" />
         <Error
             Code="InvalidBinaryPackageDownloadUrl"
@@ -92,7 +66,9 @@
         <Message Text="Validation done." Importance="High" />
     </Target>
 
-    <Target Name="DownloadPackage" AfterTargets="Validation">
+    <Target Name="DownloadPackage"
+        AfterTargets="Validation"
+        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
         <Message Text="Downloading binary package from $(BinaryPackageDownloadUrl)..." Importance="High" />
         <!-- Download to local file -->
         <DownloadFile
@@ -109,7 +85,9 @@
         <Message Text="Binary package downloaded to $(LocalFilePath)." Importance="High" />
     </Target>
 
-    <Target Name="UnpackDownloadedPackage" AfterTargets="DownloadPackage">        
+    <Target Name="UnpackDownloadedPackage"
+        AfterTargets="DownloadPackage"
+        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">        
         <Message Text="Unpacking binary package $(LocalFilePath)..." Importance="High" />
         <!-- Clear existing folder -->
         <RemoveDir
@@ -122,6 +100,30 @@
         <Message Text="Binary package unpacked to $(UnpackFolderPath)." Importance="High" />
     </Target>
 
+    <Target Name="GetFilesToPack"
+        AfterTargets="UnpackDownloadedPackage"
+        Returns="@(FilesToPack)"
+        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
+        <ItemGroup>
+            <FilesToPack Include="$(UnpackFolderPath)/**" Condition=" '$(IsNestedPackage)' != 'True' " />
+            <!-- Handle nested zip package -->
+            <FilesToPack Include="$([System.IO.Path]::Combine($(UnpackFolderPath), $(NestedPackageFolderName)))/**" Condition=" '$(IsNestedPackage)' == 'True' " />
+        </ItemGroup>
+    </Target>
+
+    <Target Name="PrepareNuGetPackage"
+        AfterTargets="GetFilesToPack"
+        BeforeTargets="Pack"
+        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
+        <ItemGroup>
+            <Content Include="@(FilesToPack)">
+                <Pack>True</Pack>
+                <PackagePath>tools\</PackagePath>
+            </Content>
+        </ItemGroup>
+    </Target>
+
+    <!-- Helper targets -->
     <Target Name="UnPackZipFile">
         <Unzip
             SourceFiles="$(LocalFilePath)"
@@ -148,23 +150,6 @@
             SourceFiles="$(LocalFilePath)"
             DestinationFolder="$(UnpackFolderPath)">
         </UnPackTarGz>
-    </Target>
-
-    <Target Name="GetFilesToPack" AfterTargets="UnpackDownloadedPackage" Returns="@(FilesToPack)">
-        <ItemGroup>
-            <FilesToPack Include="$(UnpackFolderPath)/**" Condition=" '$(IsNestedPackage)' != 'True' " />
-            <!-- Handle nested zip package -->
-            <FilesToPack Include="$([System.IO.Path]::Combine($(UnpackFolderPath), $(NestedPackageFolderName)))/**" Condition=" '$(IsNestedPackage)' == 'True' " />
-        </ItemGroup>
-    </Target>
-
-    <Target Name="PrepareNuGetPackage" AfterTargets="GetFilesToPack" BeforeTargets="Pack">
-        <ItemGroup>
-            <Content Include="@(FilesToPack)">
-                <Pack>True</Pack>
-                <PackagePath>tools\</PackagePath>
-            </Content>
-        </ItemGroup>
     </Target>
 
 </Project>

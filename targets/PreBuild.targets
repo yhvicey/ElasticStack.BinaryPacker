@@ -1,0 +1,66 @@
+<Project>
+
+    <PropertyGroup>
+        <BinaryPackageDownloadUrl Condition=" '$(BinaryPackageDownloadUrl)' == '' ">$(BinaryPackageDownloadUrlTemplate)</BinaryPackageDownloadUrl>
+        <BinaryPackageName Condition=" '$(BinaryPackageName)' == '' ">$(BinaryPackageNameTemplate)</BinaryPackageName>
+        <NuGetFeedToCheck Condition=" '$(NuGetFeedToCheck)' == '' ">https://api.nuget.org/v3/index.json</NuGetFeedToCheck>
+        <PackagePublished Condition=" '$(PackagePublished)' == '' ">False</PackagePublished>
+    </PropertyGroup>
+
+    <!-- Resolve binary download url -->
+    <PropertyGroup>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageOS}', $(BinaryPackageOS)))</BinaryPackageDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackagePlatform}', $(BinaryPackagePlatform)))</BinaryPackageDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageVersion}', $(BinaryPackageVersion)))</BinaryPackageDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</BinaryPackageDownloadUrl>
+    </PropertyGroup>
+
+    <!-- Resolve package name -->
+    <PropertyGroup>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageOS}', $(BinaryPackageOS)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackagePlatform}', $(BinaryPackagePlatform)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageVersion}', $(BinaryPackageVersion)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</BinaryPackageName>
+    </PropertyGroup>
+
+    <!-- NuGet package props -->
+    <PropertyGroup>
+        <PackageId>$(BinaryPackageName)</PackageId>
+        <Version>$(BinaryPackageVersion)</Version>
+        <IsTool>True</IsTool>
+    </PropertyGroup>
+    
+    <!-- Custom tasks -->
+    <UsingTask 
+        TaskName="ElasticStack.BinaryPacker.Tasks.ListLatestNuGetPackageVersion"
+        AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
+
+    <Target Name="CheckIfPackagePublished" BeforeTargets="Build">
+        <Message Text="Checking if package is published..." Importance="High" />
+        <ListLatestNuGetPackageVersion
+            NuGetFeed="$(NuGetFeedToCheck)"
+            PackageId="$(BinaryPackageName)">
+            <Output
+                TaskParameter="Exists"
+                PropertyName="PackagePublished">
+            </Output>
+            <Output
+                TaskParameter="LatestVersion"
+                PropertyName="PackageLatestVersion">
+            </Output>
+        </ListLatestNuGetPackageVersion>
+        <Message
+            Text="Target package not published yet."
+            Importance="High"
+            Condition=" '$(PackagePublished)' != 'True' " />
+        <Message
+            Text="Target package already published, latest version is $(PackageLatestVersion)"
+            Importance="High"
+            Condition=" '$(PackagePublished)' == 'True' " />
+        <!-- Control props -->
+        <PropertyGroup>
+            <GeneratePackageOnBuild Condition=" '$(PackagePublished)' == 'True' ">False</GeneratePackageOnBuild>
+        </PropertyGroup>
+    </Target>
+
+</Project>
