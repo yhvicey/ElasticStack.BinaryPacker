@@ -1,0 +1,10 @@
+<Project>
+    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., Directory.Build.props))/Directory.Build.props" />
+
+    <PropertyGroup>
+        <BinaryPackageDownloadUrlTemplate>https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{BinaryPackageVersion}-{BinaryPackageOS}-{BinaryPackagePlatform}{BinaryPackageExtension}</BinaryPackageDownloadUrlTemplate>
+        <BinaryPackageNameTemplate>elasticsearch-{BinaryPackageOS}-{BinaryPackagePlatform}-binary</BinaryPackageNameTemplate>
+        <IsNestedPackage>True</IsNestedPackage>
+    </PropertyGroup>
+
+</Project>
