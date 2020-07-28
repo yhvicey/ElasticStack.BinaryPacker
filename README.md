@@ -4,12 +4,26 @@ This project aims at packing ElasticStack component binaries into NuGet packages
 
 ## Package list
 
+### Elasticsearch
+
+| Name                                | Operation System | Platform | NuGet Package                                                                                                                                          |
+| ----------------------------------- | ---------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| elasticsearch-windows-x86_64-binary | Windows          | x86_64   | [![NuGet](https://img.shields.io/nuget/v/elasticsearch-windows-x86_64-binary.svg)](https://www.nuget.org/packages/elasticsearch-windows-x86_64-binary) |
+| elasticsearch-linux-x86_64-binary   | Linux            | x86_64   | [![NuGet](https://img.shields.io/nuget/v/elasticsearch-linux-x86_64-binary.svg)](https://www.nuget.org/packages/elasticsearch-linux-x86_64-binary)     |
+
 ### Filebeat
 
 | Name                           | Operation System | Platform | NuGet Package                                                                                                                                |
 | ------------------------------ | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | filebeat-windows-x86_64-binary | Windows          | x86_64   | [![NuGet](https://img.shields.io/nuget/v/filebeat-windows-x86_64-binary.svg)](https://www.nuget.org/packages/filebeat-windows-x86_64-binary) |
 | filebeat-linux-x86_64-binary   | Linux            | x86_64   | [![NuGet](https://img.shields.io/nuget/v/filebeat-linux-x86_64-binary.svg)](https://www.nuget.org/packages/filebeat-linux-x86_64-binary)     |
+
+### Kibana
+
+| Name                         | Operation System | Platform | NuGet Package                                                                                                                            |
+| ---------------------------- | ---------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| kibana-windows-x86_64-binary | Windows          | x86_64   | [![NuGet](https://img.shields.io/nuget/v/kibana-windows-x86_64-binary.svg)](https://www.nuget.org/packages/kibana-windows-x86_64-binary) |
+| kibana-linux-x86_64-binary   | Linux            | x86_64   | [![NuGet](https://img.shields.io/nuget/v/kibana-linux-x86_64-binary.svg)](https://www.nuget.org/packages/kibana-linux-x86_64-binary)     |
 
 ### Logstash
 
