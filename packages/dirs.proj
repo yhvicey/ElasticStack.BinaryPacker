@@ -1,7 +1,11 @@
 <Project Sdk="Microsoft.Build.Traversal">
 
     <ItemGroup>
-        <ProjectReference Include="**/package.proj" />
+        <ProjectReference Include="apmserver/dirs.proj" />
+        <ProjectReference Include="elasticsearch/dirs.proj" />
+        <ProjectReference Include="filebeat/dirs.proj" />
+        <ProjectReference Include="kibana/dirs.proj" />
+        <ProjectReference Include="logstash/dirs.proj" />
     </ItemGroup>
 
 </Project>
