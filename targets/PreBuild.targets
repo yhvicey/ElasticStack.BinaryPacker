@@ -72,7 +72,7 @@
             </Output>
         </ListLatestNuGetPackageVersion>
         <Message
-            Text="Target package not published yet."
+            Text="Target package haven't published yet."
             Importance="High"
             Condition=" '$(PackagePublished)' != 'True' " />
         <Message
