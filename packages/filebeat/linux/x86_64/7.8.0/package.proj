@@ -5,7 +5,6 @@
         <BinaryPackageOS>linux</BinaryPackageOS>
         <BinaryPackagePlatform>x86_64</BinaryPackagePlatform>
         <BinaryPackageExtension>.tar.gz</BinaryPackageExtension>
-        <IsNestedPackage>True</IsNestedPackage>
     </PropertyGroup>
     
 </Project>
