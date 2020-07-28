@@ -9,7 +9,7 @@ using NuGet.Protocol.Core.Types;
 
 namespace ElasticStack.BinaryPacker.Tasks
 {
-    public class PackageVersionExists : Task
+    public class IsPackageVersionExists : Task
     {
         [Required]
         public string NuGetFeed { get; set; }
