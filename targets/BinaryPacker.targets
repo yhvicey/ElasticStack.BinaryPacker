@@ -44,30 +44,8 @@
         AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
 
     <!-- Targets -->
-    <Target Name="Validation"
-        AfterTargets="CheckIfShoudPackPacakge"
-        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
-        <Message Text="Validating properties..." Importance="High" />
-        <Error
-            Code="InvalidBinaryPackageDownloadUrl"
-            Text="Binary package download url is empty."
-            Condition=" '$(BinaryPackageDownloadUrl)' == '' ">
-        </Error>
-        <Error
-            Code="InvalidBinaryPackageName"
-            Text="Binary package name is empty."
-            Condition=" '$(BinaryPackageName)' == '' ">
-        </Error>
-        <Error
-            Code="InvalidBinaryPackageVersion"
-            Text="Binary package version is empty."
-            Condition=" '$(BinaryPackageVersion)' == '' ">
-        </Error>
-        <Message Text="Validation done." Importance="High" />
-    </Target>
-
     <Target Name="DownloadPackage"
-        AfterTargets="Validation"
+        AfterTargets="CheckIfPackagePublished"
         Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
         <Message Text="Downloading binary package from $(BinaryPackageDownloadUrl)..." Importance="High" />
         <!-- Download to local file -->
