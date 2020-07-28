@@ -4,7 +4,6 @@
         <BinaryPackageDownloadUrl Condition=" '$(BinaryPackageDownloadUrl)' == '' ">$(BinaryPackageDownloadUrlTemplate)</BinaryPackageDownloadUrl>
         <BinaryPackageName Condition=" '$(BinaryPackageName)' == '' ">$(BinaryPackageNameTemplate)</BinaryPackageName>
         <NuGetFeedToCheck Condition=" '$(NuGetFeedToCheck)' == '' ">https://api.nuget.org/v3/index.json</NuGetFeedToCheck>
-        <PackagePublished Condition=" '$(PackagePublished)' == '' ">False</PackagePublished>
     </PropertyGroup>
 
     <!-- Resolve binary download url -->
@@ -32,7 +31,7 @@
     
     <!-- Custom tasks -->
     <UsingTask 
-        TaskName="ElasticStack.BinaryPacker.Tasks.ListLatestNuGetPackageVersion"
+        TaskName="ElasticStack.BinaryPacker.Tasks.IsPackageVersionExists"
         AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
 
     <!-- Targets -->
@@ -59,26 +58,15 @@
 
     <Target Name="CheckIfPackagePublished" BeforeTargets="Build">
         <Message Text="Checking if package is published..." Importance="High" />
-        <ListLatestNuGetPackageVersion
+        <IsPackageVersionExists
             NuGetFeed="$(NuGetFeedToCheck)"
-            PackageId="$(BinaryPackageName)">
+            PackageId="$(BinaryPackageName)"
+            PackageVersion="$(BinaryPackageVersion)">
             <Output
                 TaskParameter="Exists"
                 PropertyName="PackagePublished">
             </Output>
-            <Output
-                TaskParameter="LatestVersion"
-                PropertyName="PackageLatestVersion">
-            </Output>
-        </ListLatestNuGetPackageVersion>
-        <Message
-            Text="Target package haven't published yet."
-            Importance="High"
-            Condition=" '$(PackagePublished)' != 'True' " />
-        <Message
-            Text="Target package already published, latest version is $(PackageLatestVersion)"
-            Importance="High"
-            Condition=" '$(PackagePublished)' == 'True' " />
+        </IsPackageVersionExists>
         <!-- Control props -->
         <PropertyGroup>
             <GeneratePackageOnBuild Condition=" '$(PackagePublished)' == 'True' ">False</GeneratePackageOnBuild>

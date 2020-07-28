@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -8,7 +9,7 @@ using NuGet.Protocol.Core.Types;
 
 namespace ElasticStack.BinaryPacker.Tasks
 {
-    public class ListLatestNuGetPackageVersion : Task
+    public class PackageVersionExists : Task
     {
         [Required]
         public string NuGetFeed { get; set; }
@@ -16,13 +17,13 @@ namespace ElasticStack.BinaryPacker.Tasks
         [Required]
         public string PackageId { get; set; }
 
+        [Required]
+        public string PackageVersion { get; set; }
+
         public bool IsV2Feed { get; set; } = false;
 
         [Output]
         public bool Exists { get; set; }
-
-        [Output]
-        public string LatestVersion { get; set; }
 
         public override bool Execute()
         {
@@ -35,18 +36,24 @@ namespace ElasticStack.BinaryPacker.Tasks
                 .GetAllVersionsAsync(PackageId, cache, NullLogger.Instance, CancellationToken.None)
                 .GetAwaiter()
                 .GetResult();
-            var latestVersion = versions.OrderByDescending(v => v.Version).FirstOrDefault();
-            if (latestVersion == null)
+            if (!versions.Any())
             {
                 Log.LogMessage("Package {0} doesn't exist in feed {1}", PackageId, NuGetFeed);
                 Exists = false;
-                LatestVersion = null;
+                return true;
+            }
+
+            var version = new Version(PackageVersion);
+            var exists = versions.Any(v => v.Version == version);
+            if (!exists)
+            {
+                Log.LogMessage("Version {0} of package {1} doesn't exist in feed {2}", PackageVersion, PackageId, NuGetFeed);
+                Exists = false;
             }
             else
             {
-                Log.LogMessage("Package {0} exists in feed {1}, latest version is {2}", PackageId, NuGetFeed, latestVersion.Version);
+                Log.LogMessage("Version {0} of package {1} exists in feed {2}", PackageVersion, PackageId, NuGetFeed);
                 Exists = true;
-                LatestVersion = latestVersion.Version.ToString();
             }
             return true;
         }
