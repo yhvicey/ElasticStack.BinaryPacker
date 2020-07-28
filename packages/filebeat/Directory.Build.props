@@ -4,6 +4,7 @@
     <PropertyGroup>
         <BinaryPackageDownloadUrlTemplate>https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{BinaryPackageVersion}-{BinaryPackageOS}-{BinaryPackagePlatform}{BinaryPackageExtension}</BinaryPackageDownloadUrlTemplate>
         <BinaryPackageNameTemplate>filebeat-{BinaryPackageOS}-{BinaryPackagePlatform}-binary</BinaryPackageNameTemplate>
+        <IsNestedPackage>True</IsNestedPackage>
     </PropertyGroup>
 
 </Project>
