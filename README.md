@@ -6,10 +6,16 @@ This project aims at packing ElasticStack component binaries into NuGet packages
 
 ### Filebeat
 
-| Name                    | Operation System | Platform | NuGet Package                                                                                                                  |
-| ----------------------- | ---------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| filebeat-windows-x86_64 | Windows          | x86_64   | [![NuGet](https://img.shields.io/nuget/v/filebeat-windows-x86_64.svg)](https://www.nuget.org/packages/filebeat-windows-x86_64) |
-| filebeat-linux-x86_64   | Linux            | x86_64   | [![NuGet](https://img.shields.io/nuget/v/filebeat-linux-x86_64.svg)](https://www.nuget.org/packages/filebeat-linux-x86_64)     |
+| Name                           | Operation System | Platform | NuGet Package                                                                                                                                |
+| ------------------------------ | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| filebeat-windows-x86_64-binary | Windows          | x86_64   | [![NuGet](https://img.shields.io/nuget/v/filebeat-windows-x86_64-binary.svg)](https://www.nuget.org/packages/filebeat-windows-x86_64-binary) |
+| filebeat-linux-x86_64-binary   | Linux            | x86_64   | [![NuGet](https://img.shields.io/nuget/v/filebeat-linux-x86_64-binary.svg)](https://www.nuget.org/packages/filebeat-linux-x86_64-binary)     |
+
+### Logstash
+
+| Name            | Operation System | Platform | NuGet Package                                                                                                  |
+| --------------- | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| filebeat-binary | -                | -        | [![NuGet](https://img.shields.io/nuget/v/logstash-binary.svg)](https://www.nuget.org/packages/logstash-binary) |
 
 ## Available MSBuild props
 
