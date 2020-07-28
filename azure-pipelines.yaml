@@ -15,6 +15,13 @@ trigger:
   branches:
     include:
       - master
+  paths:
+    include:
+      - src/*
+      - packages/*
+      - Directory.Build.*
+      - dirs.proj
+      - global.json
 
 pool:
   vmImage: "windows-latest"
