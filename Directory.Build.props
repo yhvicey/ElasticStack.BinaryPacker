@@ -1,11 +1,16 @@
 <Project>
 
-    <!-- Common build props -->
+    <!-- Paths -->
     <PropertyGroup>
         <EnlistmentRoot>$(MSBuildThisFileDirectory)</EnlistmentRoot>
         <PackageOutputPath>$(EnlistmentRoot)out/packages</PackageOutputPath>
         <TaskAssemblyOutputPath>$(EnlistmentRoot)out/tasks</TaskAssemblyOutputPath>
+    </PropertyGroup>
+
+    <!-- Common build props -->
+    <PropertyGroup>
         <BuildInParallel>False</BuildInParallel>
+        <NoDefaultExcludes>True</NoDefaultExcludes>
     </PropertyGroup>
 
 </Project>
