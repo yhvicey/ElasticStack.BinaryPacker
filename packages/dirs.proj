@@ -3,7 +3,7 @@
     <ItemGroup>
         <ProjectReference Include="elasticsearch/dirs.proj" />
         <ProjectReference Include="filebeat/dirs.proj" />
-        <!-- <ProjectReference Include="kibana/dirs.proj" /> -->
+        <ProjectReference Include="kibana/dirs.proj" />
         <ProjectReference Include="logstash/dirs.proj" />
     </ItemGroup>
 
