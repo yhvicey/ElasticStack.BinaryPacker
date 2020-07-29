@@ -19,7 +19,9 @@ trigger:
     include:
       - src/*
       - packages/*
-      - Directory.Build.*
+      - targets/*
+      - Directory.Build.props
+      - Directory.Build.targets
       - dirs.proj
       - global.json
 
