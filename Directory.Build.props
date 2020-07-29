@@ -5,6 +5,7 @@
         <EnlistmentRoot>$(MSBuildThisFileDirectory)</EnlistmentRoot>
         <PackageOutputPath>$(EnlistmentRoot)out/packages</PackageOutputPath>
         <TaskAssemblyOutputPath>$(EnlistmentRoot)out/tasks</TaskAssemblyOutputPath>
+        <BuildInParallel>False</BuildInParallel>
     </PropertyGroup>
 
 </Project>
