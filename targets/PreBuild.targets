@@ -4,6 +4,7 @@
         <BinaryPackageDownloadUrl Condition=" '$(BinaryPackageDownloadUrl)' == '' ">$(BinaryPackageDownloadUrlTemplate)</BinaryPackageDownloadUrl>
         <BinaryPackageName Condition=" '$(BinaryPackageName)' == '' ">$(BinaryPackageNameTemplate)</BinaryPackageName>
         <NuGetFeedToCheck Condition=" '$(NuGetFeedToCheck)' == '' ">https://api.nuget.org/v3/index.json</NuGetFeedToCheck>
+        <ForcePack Condition=" '$(ForcePack)' == '' ">False</ForcePack>
     </PropertyGroup>
 
     <!-- Resolve binary download url -->
@@ -70,6 +71,7 @@
         <!-- Control props -->
         <PropertyGroup>
             <GeneratePackageOnBuild Condition=" '$(PackagePublished)' == 'True' ">False</GeneratePackageOnBuild>
+            <GeneratePackageOnBuild Condition=" '$(ForcePack)' == 'True' ">True</GeneratePackageOnBuild>
         </PropertyGroup>
     </Target>
 

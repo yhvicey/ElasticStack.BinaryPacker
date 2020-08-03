@@ -1,0 +1,18 @@
+<Project>
+
+    <PropertyGroup>
+        <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- (root)/build/native/<packageId>.props -> (root)/tools/** -->
+        <BinaryPackageContentRoot>$(MSBuildThisFileDirectory)..\..\tools</BinaryPackageContentRoot>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Clear existing items first -->
+        <BinaryPackageContent Remove="*" />
+        <BinaryPackageContent Include="$(BinaryPackageContentRoot)\**" />
+    </ItemGroup>
+
+</Project>

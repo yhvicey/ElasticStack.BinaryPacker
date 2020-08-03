@@ -3,12 +3,24 @@
 
     <ItemGroup>
         <!-- Make sure tasks project been built before any package project -->
-        <ProjectReference Include="$(EnlistmentRoot)src/ElasticStack.BinaryPacker.Tasks/ElasticStack.BinaryPacker.Tasks.csproj">        
+        <ProjectReference Include="$(EnlistmentRoot)src/ElasticStack.BinaryPacker.Tasks/ElasticStack.BinaryPacker.Tasks.csproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
         </ProjectReference>
     </ItemGroup>
 
     <Import Project="$(EnlistmentRoot)targets/PreBuild.targets" Condition=" '$(MSBuildProjectFile)' != 'dirs.proj' " />
     <Import Project="$(EnlistmentRoot)targets/BinaryPacker.targets" Condition=" '$(MSBuildProjectFile)' != 'dirs.proj' " />
+
+    <!-- MSBuild items for package -->
+    <ItemGroup>
+        <None Include="$(EnlistmentRoot)msbuild\Package.props" Condition=" EXISTS('$(EnlistmentRoot)msbuild\Package.props') ">
+            <Pack>True</Pack>
+            <PackagePath>build\$(PackageId).props</PackagePath>
+        </None>
+        <None Include="$(EnlistmentRoot)msbuild\Package.targets" Condition=" EXISTS('$(EnlistmentRoot)msbuild\Package.targets') ">
+            <Pack>True</Pack>
+            <PackagePath>build\$(PackageId).targets</PackagePath>
+        </None>
+    </ItemGroup>
 
 </Project>
