@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.Build.NoTargets">
+
+    <PropertyGroup>
+        <BinaryPackageVersion>7.8.0</BinaryPackageVersion>
+        <BinaryPackageOS>windows</BinaryPackageOS>
+        <BinaryPackagePlatform>x86_64</BinaryPackagePlatform>
+        <BinaryPackageExtension>.zip</BinaryPackageExtension>
+    </PropertyGroup>
+
+</Project>
