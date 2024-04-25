@@ -1,9 +1,9 @@
 <Project>
-    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., Directory.Build.props))/Directory.Build.props" />
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../'))" />
 
     <PropertyGroup>
-        <BinaryPackageDownloadUrlTemplate>https://artifacts.elastic.co/downloads/kibana/kibana-{BinaryPackageVersion}-{BinaryPackageOS}-{BinaryPackagePlatform}{BinaryPackageExtension}</BinaryPackageDownloadUrlTemplate>
-        <BinaryPackageNameTemplate>kibana-{BinaryPackageOS}-{BinaryPackagePlatform}-binary</BinaryPackageNameTemplate>
+        <BinaryPackageDownloadUrlTemplate>https://artifacts.elastic.co/downloads/kibana/kibana-{BinaryPackageVersion}-{BinaryPackageOS}-{BinaryPackageArchitecture}{BinaryPackageExtension}</BinaryPackageDownloadUrlTemplate>
+        <BinaryPackageNameTemplate>kibana-{BinaryPackageOS}-{BinaryPackageArchitecture}-binary</BinaryPackageNameTemplate>
         <IsNestedPackage>True</IsNestedPackage>
     </PropertyGroup>
 

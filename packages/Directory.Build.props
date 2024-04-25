@@ -1,5 +1,5 @@
 <Project>
-    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., Directory.Build.props))/Directory.Build.props" />
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../'))" />
 
     <!-- Common build props -->
     <PropertyGroup>
@@ -22,8 +22,8 @@
 
     <!-- Disable specific warnings -->
     <PropertyGroup>
-        <NoWarn>$(NoWarn),NU5111</NoWarn> <!-- Binary may contains non-standard powershell scripts -->
-        <NoWarn>$(NoWarn),NU5128</NoWarn> <!-- This package is not aimed for referencing -->
+        <NoWarn>$(NoWarn),NU5111</NoWarn>        <!-- Binary may contains non-standard powershell scripts -->
+        <NoWarn>$(NoWarn),NU5128</NoWarn>        <!-- This package is not aimed for referencing -->
     </PropertyGroup>
 
 </Project>

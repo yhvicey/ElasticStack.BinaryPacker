@@ -8,7 +8,7 @@
         <LocalFilePath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(LocalFileName)))</LocalFilePath>
         <UnpackFolderPath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(LocalFileNameWithoutExtension)))</UnpackFolderPath>
     </PropertyGroup>
-    
+
     <Choose>
         <When Condition=" '$(BinaryPackageExtension)' == '.zip' ">
             <PropertyGroup>
@@ -33,55 +33,33 @@
     </Choose>
 
     <!-- Custom tasks -->
-    <UsingTask 
-        TaskName="ElasticStack.BinaryPacker.Tasks.UnPackTar"
-        AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
-    <UsingTask 
-        TaskName="ElasticStack.BinaryPacker.Tasks.UnPackTarGz"
-        AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
-    <UsingTask 
-        TaskName="ElasticStack.BinaryPacker.Tasks.UnPackTarBz2"
-        AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
+    <UsingTask TaskName="ElasticStack.BinaryPacker.Tasks.UnPackTar" AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
+    <UsingTask TaskName="ElasticStack.BinaryPacker.Tasks.UnPackTarGz" AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
+    <UsingTask TaskName="ElasticStack.BinaryPacker.Tasks.UnPackTarBz2" AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
 
     <!-- Targets -->
-    <Target Name="DownloadPackage"
-        AfterTargets="CheckIfPackagePublished"
-        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
+    <Target Name="DownloadPackage" AfterTargets="CheckIfPackagePublished" Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
         <Message Text="Downloading binary package from $(BinaryPackageDownloadUrl)..." Importance="High" />
         <!-- Download to local file -->
-        <DownloadFile
-            SourceUrl="$(BinaryPackageDownloadUrl)"
-            DestinationFolder="$(IntermediateOutputPath)"
-            DestinationFileName="$(LocalFileName)"
-            Retries="3">
+        <DownloadFile SourceUrl="$(BinaryPackageDownloadUrl)" DestinationFolder="$(IntermediateOutputPath)" DestinationFileName="$(LocalFileName)" Retries="3">
         </DownloadFile>
-        <Error
-            Code="FailedToDownloadFile"
-            Text="Failde to download binary from $(BinaryPackageDownloadUrl)"
-            Condition=" !EXISTS('$(LocalFilePath)') ">
+        <Error Code="FailedToDownloadFile" Text="Failde to download binary from $(BinaryPackageDownloadUrl)" Condition=" !EXISTS('$(LocalFilePath)') ">
         </Error>
         <Message Text="Binary package downloaded to $(LocalFilePath)." Importance="High" />
     </Target>
 
-    <Target Name="UnpackDownloadedPackage"
-        AfterTargets="DownloadPackage"
-        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">        
+    <Target Name="UnpackDownloadedPackage" AfterTargets="DownloadPackage" Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
         <Message Text="Unpacking binary package $(LocalFilePath)..." Importance="High" />
         <!-- Clear existing folder -->
-        <RemoveDir
-            Directories="$(LocalFilePath)">
+        <RemoveDir Directories="$(LocalFilePath)">
         </RemoveDir>
         <!-- Unpack downloaded archieve file -->
-        <CallTarget
-            Targets="$(UnPackTargetName)">
+        <CallTarget Targets="$(UnPackTargetName)">
         </CallTarget>
         <Message Text="Binary package unpacked to $(UnpackFolderPath)." Importance="High" />
     </Target>
 
-    <Target Name="GetFilesToPack"
-        AfterTargets="UnpackDownloadedPackage"
-        Returns="@(FilesToPack)"
-        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
+    <Target Name="GetFilesToPack" AfterTargets="UnpackDownloadedPackage" Returns="@(FilesToPack)" Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
         <ItemGroup>
             <FilesToPack Include="$(UnpackFolderPath)/**" Condition=" '$(IsNestedPackage)' != 'True' " />
             <!-- Handle nested zip package -->
@@ -89,10 +67,7 @@
         </ItemGroup>
     </Target>
 
-    <Target Name="PrepareNuGetPackage"
-        AfterTargets="GetFilesToPack"
-        BeforeTargets="Pack"
-        Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
+    <Target Name="PrepareNuGetPackage" AfterTargets="GetFilesToPack" BeforeTargets="Pack" Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
         <ItemGroup>
             <Content Include="@(FilesToPack)">
                 <Pack>True</Pack>
@@ -103,30 +78,22 @@
 
     <!-- Helper targets -->
     <Target Name="UnPackZipFile">
-        <Unzip
-            SourceFiles="$(LocalFilePath)"
-            DestinationFolder="$(UnpackFolderPath)">
+        <Unzip SourceFiles="$(LocalFilePath)" DestinationFolder="$(UnpackFolderPath)">
         </Unzip>
     </Target>
 
     <Target Name="UnPackTarFile">
-        <UnPackTar
-            SourceFiles="$(LocalFilePath)"
-            DestinationFolder="$(UnpackFolderPath)">
+        <UnPackTar SourceFiles="$(LocalFilePath)" DestinationFolder="$(UnpackFolderPath)">
         </UnPackTar>
     </Target>
 
     <Target Name="UnPackTarBz2File">
-        <UnPackTarBz2
-            SourceFiles="$(LocalFilePath)"
-            DestinationFolder="$(UnpackFolderPath)">
+        <UnPackTarBz2 SourceFiles="$(LocalFilePath)" DestinationFolder="$(UnpackFolderPath)">
         </UnPackTarBz2>
     </Target>
 
     <Target Name="UnPackTarGzFile">
-        <UnPackTarGz
-            SourceFiles="$(LocalFilePath)"
-            DestinationFolder="$(UnpackFolderPath)">
+        <UnPackTarGz SourceFiles="$(LocalFilePath)" DestinationFolder="$(UnpackFolderPath)">
         </UnPackTarGz>
     </Target>
 

@@ -3,7 +3,7 @@
     <PropertyGroup>
         <BinaryPackageVersion>7.8.0</BinaryPackageVersion>
         <BinaryPackageOS>windows</BinaryPackageOS>
-        <BinaryPackagePlatform>x86_64</BinaryPackagePlatform>
+        <BinaryPackageArchitecture>x86_64</BinaryPackageArchitecture>
         <BinaryPackageExtension>.zip</BinaryPackageExtension>
     </PropertyGroup>
 

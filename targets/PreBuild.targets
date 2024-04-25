@@ -7,19 +7,26 @@
         <ForcePack Condition=" '$(ForcePack)' == '' ">False</ForcePack>
     </PropertyGroup>
 
+    <!-- Special process for placeholders -->
+    <PropertyGroup>
+        <BinaryPackageOSPlaceholder Condition=" '$(BinaryPackageOS)' != '' ">-$(BinaryPackageOS)</BinaryPackageOSPlaceholder>
+        <BinaryPackageArchitecturePlaceholder Condition=" '$(BinaryPackageArchitecture)' != '' ">-$(BinaryPackageArchitecture)</BinaryPackageArchitecturePlaceholder>
+        <BinaryPackageVersionPlaceholder Condition=" '$(BinaryPackageVersion)' != '' ">-$(BinaryPackageVersion)</BinaryPackageVersionPlaceholder>
+    </PropertyGroup>
+
     <!-- Resolve binary download url -->
     <PropertyGroup>
-        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageOS}', $(BinaryPackageOS)))</BinaryPackageDownloadUrl>
-        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackagePlatform}', $(BinaryPackagePlatform)))</BinaryPackageDownloadUrl>
-        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageVersion}', $(BinaryPackageVersion)))</BinaryPackageDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('-{BinaryPackageOS}', $(BinaryPackageOSPlaceholder)))</BinaryPackageDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('-{BinaryPackageArchitecture}', $(BinaryPackageArchitecturePlaceholder)))</BinaryPackageDownloadUrl>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('-{BinaryPackageVersion}', $(BinaryPackageVersionPlaceholder)))</BinaryPackageDownloadUrl>
         <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</BinaryPackageDownloadUrl>
     </PropertyGroup>
 
     <!-- Resolve package name -->
     <PropertyGroup>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageOS}', $(BinaryPackageOS)))</BinaryPackageName>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackagePlatform}', $(BinaryPackagePlatform)))</BinaryPackageName>
-        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageVersion}', $(BinaryPackageVersion)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('-{BinaryPackageOS}', $(BinaryPackageOSPlaceholder)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('-{BinaryPackageArchitecture}', $(BinaryPackageArchitecturePlaceholder)))</BinaryPackageName>
+        <BinaryPackageName>$(BinaryPackageName.Replace('-{BinaryPackageVersion}', $(BinaryPackageVersionPlaceholder)))</BinaryPackageName>
         <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</BinaryPackageName>
     </PropertyGroup>
 
@@ -29,43 +36,26 @@
         <Version>$(BinaryPackageVersion)</Version>
         <IsTool>True</IsTool>
     </PropertyGroup>
-    
+
     <!-- Custom tasks -->
-    <UsingTask 
-        TaskName="ElasticStack.BinaryPacker.Tasks.IsPackageVersionExists"
-        AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
+    <UsingTask TaskName="ElasticStack.BinaryPacker.Tasks.IsPackageVersionExists" AssemblyFile="$(TaskAssemblyOutputPath)/ElasticStack.BinaryPacker.Tasks.dll" />
 
     <!-- Targets -->
-    <Target Name="Validation"
-        BeforeTargets="CheckIfPackagePublished">
+    <Target Name="Validation" BeforeTargets="CheckIfPackagePublished">
         <Message Text="Validating properties..." Importance="High" />
-        <Error
-            Code="InvalidBinaryPackageDownloadUrl"
-            Text="Binary package download url is empty."
-            Condition=" '$(BinaryPackageDownloadUrl)' == '' ">
+        <Error Code="InvalidBinaryPackageDownloadUrl" Text="Binary package download url is empty." Condition=" '$(BinaryPackageDownloadUrl)' == '' ">
         </Error>
-        <Error
-            Code="InvalidBinaryPackageName"
-            Text="Binary package name is empty."
-            Condition=" '$(BinaryPackageName)' == '' ">
+        <Error Code="InvalidBinaryPackageName" Text="Binary package name is empty." Condition=" '$(BinaryPackageName)' == '' ">
         </Error>
-        <Error
-            Code="InvalidBinaryPackageVersion"
-            Text="Binary package version is empty."
-            Condition=" '$(BinaryPackageVersion)' == '' ">
+        <Error Code="InvalidBinaryPackageVersion" Text="Binary package version is empty." Condition=" '$(BinaryPackageVersion)' == '' ">
         </Error>
         <Message Text="Validation done." Importance="High" />
     </Target>
 
     <Target Name="CheckIfPackagePublished" BeforeTargets="Build">
         <Message Text="Checking if package is published..." Importance="High" />
-        <IsPackageVersionExists
-            NuGetFeed="$(NuGetFeedToCheck)"
-            PackageId="$(BinaryPackageName)"
-            PackageVersion="$(BinaryPackageVersion)">
-            <Output
-                TaskParameter="Exists"
-                PropertyName="PackagePublished">
+        <IsPackageVersionExists NuGetFeed="$(NuGetFeedToCheck)" PackageId="$(BinaryPackageName)" PackageVersion="$(BinaryPackageVersion)">
+            <Output TaskParameter="Exists" PropertyName="PackagePublished">
             </Output>
         </IsPackageVersionExists>
         <!-- Control props -->

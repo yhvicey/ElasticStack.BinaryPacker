@@ -39,11 +39,11 @@ This project aims at packing ElasticStack component binaries into NuGet packages
 | BinaryPackageNameTemplate        | Yes       | -             | Name to be used as packed package's id. Support placeholders\*.                                     |
 | BinaryPackageVersion             | Yes       | -             | Version of component binary package, will also be used as packed package's version.                 |
 | BinaryPackageOS                  | No        | -             | Target operation system of component binary package.                                                |
-| BinaryPackagePlatform            | No        | -             | Target platform of component binary package.                                                        |
+| BinaryPackageArchitecture        | No        | -             | Target architecture of component binary package.                                                    |
 | BinaryPackageExtension           | No        | -             | File extension of component binary package.                                                         |
 | IsNestedPackage                  | No        | False         | Indicates if the package is nested package (e.g. the archive file contains a folder with same name) |
 
-\* Supported placeholders: `{BinaryPackageOS}`, `{BinaryPackagePlatform}`, `{BinaryPackageVersion}`, `{BinaryPackageExtension}`.
+\* Supported placeholders: `{BinaryPackageOS}`, `{BinaryPackageArchitecture}`, `{BinaryPackageVersion}`, `{BinaryPackageExtension}`.
 
 ## Add new component package
 
@@ -51,7 +51,7 @@ This project aims at packing ElasticStack component binaries into NuGet packages
 
    ```xml
    <Project>
-       <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., Directory.Build.props))/Directory.Build.props" />
+       <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../'))" />
        <PropertyGroup>
            <BinaryPackageDownloadUrlTemplate>COMPONENT_BINARY_PACKAGE_DOWNLOAD_URL_TEMPLATE</BinaryPackageDownloadUrlTemplate>
            <BinaryPackageNameTemplate>COMPONENT_BINARY_PACKAGE_NAME_TEMPLATE</BinaryPackageNameTemplate>
@@ -90,7 +90,7 @@ This project aims at packing ElasticStack component binaries into NuGet packages
        <PropertyGroup>
            <BinaryPackageVersion>COMPONENT_BINARY_PACKAGE_VERSION</BinaryPackageVersion>
            <BinaryPackageOS>COMPONENT_BINARY_PACKAGE_OS</BinaryPackageOS>
-           <BinaryPackagePlatform>COMPONENT_BINARY_PACKAGE_PLATFORM</BinaryPackagePlatform>
+           <BinaryPackageArchitecture>COMPONENT_BINARY_PACKAGE_ARCHITECTURE</BinaryPackageArchitecture>
            <BinaryPackageExtension>COMPONENT_BINARY_PACKAGE_EXTENSION</BinaryPackageExtension>
        </PropertyGroup>
    </Project>

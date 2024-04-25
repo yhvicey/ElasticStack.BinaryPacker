@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using ICSharpCode.SharpZipLib.BZip2;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
@@ -73,7 +74,7 @@ namespace ElasticStack.BinaryPacker.Tasks.Internal
             Stream tarStream,
             string destinationFolder)
         {
-            var archive = TarArchive.CreateInputTarArchive(tarStream);
+            var archive = TarArchive.CreateInputTarArchive(tarStream, Encoding.Unicode);
             archive.ExtractContents(destinationFolder);
         }
 

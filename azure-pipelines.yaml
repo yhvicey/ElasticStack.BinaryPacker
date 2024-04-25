@@ -39,7 +39,7 @@ variables:
   PackagesOutputFolder: $(OutputFolder)/packages
   # MSBuild-related props
   BuildConfiguration: Release
-  DotNetCoreVersion: 3.1.100
+  DotNetSdkVersion: 8.x
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Skip caching packages
 
 steps:
@@ -48,7 +48,7 @@ steps:
     enabled: false
     inputs:
       packageType: "sdk"
-      version: $(DotNetCoreVersion)
+      version: $(DotNetSdkVersion)
 
   # Build
   - task: DotNetCoreCLI@2
@@ -63,7 +63,7 @@ steps:
     displayName: Publish Packages
     condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')) # Only trigger package publishing in CI build
     inputs:
-      command: 'push'
-      packagesToPush: '$(PackagesOutputFolder)/*.nupkg'
-      nuGetFeedType: 'external'
-      publishFeedCredentials: 'NuGet.org'
+      command: "push"
+      packagesToPush: "$(PackagesOutputFolder)/*.nupkg"
+      nuGetFeedType: "external"
+      publishFeedCredentials: "NuGet.org"
