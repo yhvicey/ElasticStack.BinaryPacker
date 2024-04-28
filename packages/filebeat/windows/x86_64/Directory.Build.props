@@ -1,0 +1,8 @@
+<Project>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../'))" />
+
+    <PropertyGroup>
+        <BinaryPackageArchitecture>x86_64</BinaryPackageArchitecture>
+    </PropertyGroup>
+
+</Project>

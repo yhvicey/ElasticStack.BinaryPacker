@@ -3,8 +3,8 @@
 
     <PropertyGroup>
         <BinaryPackageComponent>logstash</BinaryPackageComponent>
-        <BinaryPackageDownloadUrlTemplate>https://artifacts.elastic.co/downloads/{BinaryPackageComponent}/{BinaryPackageComponent}-{BinaryPackageVersion}-{BinaryPackageOS}-{BinaryPackageArchitecture}{BinaryPackageExtension}</BinaryPackageDownloadUrlTemplate>
         <BinaryPackageExtension>.zip</BinaryPackageExtension>
+        <BinaryPackageDownloadUrlTemplate>https://artifacts.elastic.co/downloads/{BinaryPackageComponent}/{BinaryPackageComponent}-{BinaryPackageVersion}-{BinaryPackageOS}-{BinaryPackageArchitecture}{BinaryPackageExtension}</BinaryPackageDownloadUrlTemplate>
     </PropertyGroup>
 
 </Project>
