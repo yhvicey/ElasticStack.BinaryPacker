@@ -7,6 +7,12 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
+    <!-- Common package props -->
+    <PropertyGroup>
+        <BinaryPackageNameTemplate>{BinaryPackageComponent}-{BinaryPackageOS}-{BinaryPackageArchitecture}-binary</BinaryPackageNameTemplate>
+        <NestedPackageFolderName>{BinaryPackageComponent}-{BinaryPackageVersion}</NestedPackageFolderName>
+    </PropertyGroup>
+
     <!-- Common NuGet package props -->
     <PropertyGroup>
         <Authors>ElasticStackBinaryPacker</Authors>

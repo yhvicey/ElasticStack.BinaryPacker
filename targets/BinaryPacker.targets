@@ -4,7 +4,6 @@
     <PropertyGroup>
         <LocalFileName>$([System.IO.Path]::GetFileName($(BinaryPackageDownloadUrl)))</LocalFileName>
         <LocalFileNameWithoutExtension>$(LocalFileName.Replace('$(BinaryPackageExtension)', ''))</LocalFileNameWithoutExtension>
-        <NestedPackageFolderName Condition=" '$(NestedPackageFolderName)' == '' ">$(LocalFileNameWithoutExtension)</NestedPackageFolderName>
         <LocalFilePath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(LocalFileName)))</LocalFilePath>
         <UnpackFolderPath>$([System.IO.Path]::Combine($(IntermediateOutputPath), $(LocalFileNameWithoutExtension)))</UnpackFolderPath>
     </PropertyGroup>
@@ -60,11 +59,14 @@
     </Target>
 
     <Target Name="GetFilesToPack" AfterTargets="UnpackDownloadedPackage" Returns="@(FilesToPack)" Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
+        <PropertyGroup>
+            <UnpackFolderPath>$([System.IO.Path]::Combine($(UnpackFolderPath), $(NestedPackageFolderName)))</UnpackFolderPath>
+        </PropertyGroup>
+        <Message Text="Collecting files to pack from $(UnpackFolderPath)..." Importance="High" />
         <ItemGroup>
-            <FilesToPack Include="$(UnpackFolderPath)/**" Condition=" '$(IsNestedPackage)' != 'True' " />
-            <!-- Handle nested zip package -->
-            <FilesToPack Include="$([System.IO.Path]::Combine($(UnpackFolderPath), $(NestedPackageFolderName)))/**" Condition=" '$(IsNestedPackage)' == 'True' " />
+            <FilesToPack Include="$(UnpackFolderPath)/**" />
         </ItemGroup>
+        <Message Text="Collected @(FilesToPack->Count()) file(s) to pack from $(UnpackFolderPath)." Importance="High" />
     </Target>
 
     <Target Name="PrepareNuGetPackage" AfterTargets="GetFilesToPack" BeforeTargets="Pack" Condition=" '$(GeneratePackageOnBuild)' == 'True' ">

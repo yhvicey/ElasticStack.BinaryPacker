@@ -16,6 +16,7 @@
 
     <!-- Resolve binary download url -->
     <PropertyGroup>
+        <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('{BinaryPackageComponent}', $(BinaryPackageComponent)))</BinaryPackageDownloadUrl>
         <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('-{BinaryPackageOS}', $(BinaryPackageOSPlaceholder)))</BinaryPackageDownloadUrl>
         <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('-{BinaryPackageArchitecture}', $(BinaryPackageArchitecturePlaceholder)))</BinaryPackageDownloadUrl>
         <BinaryPackageDownloadUrl>$(BinaryPackageDownloadUrl.Replace('-{BinaryPackageVersion}', $(BinaryPackageVersionPlaceholder)))</BinaryPackageDownloadUrl>
@@ -24,10 +25,20 @@
 
     <!-- Resolve package name -->
     <PropertyGroup>
+        <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageComponent}', $(BinaryPackageComponent)))</BinaryPackageName>
         <BinaryPackageName>$(BinaryPackageName.Replace('-{BinaryPackageOS}', $(BinaryPackageOSPlaceholder)))</BinaryPackageName>
         <BinaryPackageName>$(BinaryPackageName.Replace('-{BinaryPackageArchitecture}', $(BinaryPackageArchitecturePlaceholder)))</BinaryPackageName>
         <BinaryPackageName>$(BinaryPackageName.Replace('-{BinaryPackageVersion}', $(BinaryPackageVersionPlaceholder)))</BinaryPackageName>
         <BinaryPackageName>$(BinaryPackageName.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</BinaryPackageName>
+    </PropertyGroup>
+
+    <!-- Resolve nested package name -->
+    <PropertyGroup>
+        <NestedPackageFolderName>$(NestedPackageFolderName.Replace('{BinaryPackageComponent}', $(BinaryPackageComponent)))</NestedPackageFolderName>
+        <NestedPackageFolderName>$(NestedPackageFolderName.Replace('-{BinaryPackageOS}', $(BinaryPackageOSPlaceholder)))</NestedPackageFolderName>
+        <NestedPackageFolderName>$(NestedPackageFolderName.Replace('-{BinaryPackageArchitecture}', $(BinaryPackageArchitecturePlaceholder)))</NestedPackageFolderName>
+        <NestedPackageFolderName>$(NestedPackageFolderName.Replace('-{BinaryPackageVersion}', $(BinaryPackageVersionPlaceholder)))</NestedPackageFolderName>
+        <NestedPackageFolderName>$(NestedPackageFolderName.Replace('{BinaryPackageExtension}', $(BinaryPackageExtension)))</NestedPackageFolderName>
     </PropertyGroup>
 
     <!-- NuGet package props -->
