@@ -3,7 +3,6 @@
 
     <PropertyGroup>
         <BinaryPackageComponent>filebeat</BinaryPackageComponent>
-        <BinaryPackageExtension>.zip</BinaryPackageExtension>
         <BinaryPackageDownloadUrlTemplate>https://artifacts.elastic.co/downloads/beats/{BinaryPackageComponent}/{BinaryPackageComponent}-{BinaryPackageVersion}-{BinaryPackageOS}-{BinaryPackageArchitecture}{BinaryPackageExtension}</BinaryPackageDownloadUrlTemplate>
     </PropertyGroup>
 
