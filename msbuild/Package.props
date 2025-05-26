@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <!-- (root)/build/native/<packageId>.props -> (root)/tools/** -->
-        <BinaryPackageContentRoot>$(MSBuildThisFileDirectory)..\..\tools</BinaryPackageContentRoot>
+        <!-- (root)/build/<packageId>.props -> (root)/tools/** -->
+        <BinaryPackageContentRoot>$(MSBuildThisFileDirectory)..\tools</BinaryPackageContentRoot>
     </PropertyGroup>
 
     <ItemGroup>
