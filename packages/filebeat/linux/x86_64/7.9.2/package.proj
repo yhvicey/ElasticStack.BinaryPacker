@@ -1,7 +1,0 @@
-<Project Sdk="Microsoft.Build.NoTargets">
-
-    <PropertyGroup>
-        <BinaryPackageVersion>7.9.2</BinaryPackageVersion>
-    </PropertyGroup>
-
-</Project>
