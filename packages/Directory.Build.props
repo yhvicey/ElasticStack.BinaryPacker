@@ -10,7 +10,7 @@
     <!-- Common package props -->
     <PropertyGroup>
         <BinaryPackageNameTemplate>{BinaryPackageComponent}-{BinaryPackageOS}-{BinaryPackageArchitecture}-binary</BinaryPackageNameTemplate>
-        <NestedPackageFolderName>{BinaryPackageComponent}-{BinaryPackageVersion}</NestedPackageFolderName>
+        <NestedPackageFolderName>{BinaryPackageComponent}-{BinaryPackageVersion}-{BinaryPackageOS}-{BinaryPackageArchitecture}</NestedPackageFolderName>
     </PropertyGroup>
 
     <!-- Common NuGet package props -->
@@ -30,6 +30,7 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn),NU5111</NoWarn>        <!-- Binary may contains non-standard powershell scripts -->
         <NoWarn>$(NoWarn),NU5128</NoWarn>        <!-- This package is not aimed for referencing -->
+        <NoWarn>$(NoWarn);NETSDK1215</NoWarn>        <!-- TargetFramework is not actually used in these projects -->
     </PropertyGroup>
 
 </Project>

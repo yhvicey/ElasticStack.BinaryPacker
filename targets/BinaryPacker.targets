@@ -42,7 +42,7 @@
         <!-- Download to local file -->
         <DownloadFile SourceUrl="$(BinaryPackageDownloadUrl)" DestinationFolder="$(IntermediateOutputPath)" DestinationFileName="$(LocalFileName)" Retries="3">
         </DownloadFile>
-        <Error Code="FailedToDownloadFile" Text="Failde to download binary from $(BinaryPackageDownloadUrl)" Condition=" !EXISTS('$(LocalFilePath)') ">
+        <Error Code="FailedToDownloadFile" Text="Failed to download binary from $(BinaryPackageDownloadUrl)" Condition=" !EXISTS('$(LocalFilePath)') ">
         </Error>
         <Message Text="Binary package downloaded to $(LocalFilePath)." Importance="High" />
     </Target>
@@ -52,7 +52,7 @@
         <!-- Clear existing folder -->
         <RemoveDir Directories="$(LocalFilePath)">
         </RemoveDir>
-        <!-- Unpack downloaded archieve file -->
+        <!-- Unpack downloaded archive file -->
         <CallTarget Targets="$(UnPackTargetName)">
         </CallTarget>
         <Message Text="Binary package unpacked to $(UnpackFolderPath)." Importance="High" />
