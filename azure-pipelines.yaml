@@ -58,12 +58,8 @@ steps:
       projects: $(RootProject)
       arguments: "--configuration $(BuildConfiguration) --verbosity $(Verbosity)"
 
-  # Publish - TODO: Should this step be splitted as CD?
-  - task: NuGetCommand@2
-    displayName: Publish Packages
-    condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')) # Only trigger package publishing in CI build
+  - task: PublishBuildArtifacts@1
     inputs:
-      command: "push"
-      packagesToPush: "$(PackagesOutputFolder)/*.nupkg"
-      nuGetFeedType: "external"
-      publishFeedCredentials: "NuGet.org"
+      PathtoPublish: '$(PackagesOutputFolder)'
+      ArtifactName: 'Packages'
+      publishLocation: 'Container'
