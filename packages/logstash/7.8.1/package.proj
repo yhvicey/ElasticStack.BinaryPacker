@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <BinaryPackageVersion>7.8.1</BinaryPackageVersion>
-        <BinaryPackageExtension>.zip</BinaryPackageExtension>
     </PropertyGroup>
 
 </Project>
