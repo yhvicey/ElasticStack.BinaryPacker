@@ -78,6 +78,16 @@
         </ItemGroup>
     </Target>
 
+    <Target Name="CleanUpIntermediateFiles" AfterTargets="Pack" Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
+        <ItemGroup>
+            <FilesToCleanup Include="$(IntermediateOutputPath)/**" />
+        </ItemGroup>
+        <Message Text="Cleaning up @(FilesToCleanup->Count()) intermediate file(s)..." Importance="High" />
+        <!-- Remove unpacked files -->
+        <Delete Files="@(FilesToCleanup)" TreatErrorsAsWarnings="True" />
+        <Message Text="Unpacked files cleaned up." Importance="High" />
+    </Target>
+
     <!-- Helper targets -->
     <Target Name="UnPackZipFile">
         <Unzip SourceFiles="$(LocalFilePath)" DestinationFolder="$(UnpackFolderPath)">
