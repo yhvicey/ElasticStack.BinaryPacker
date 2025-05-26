@@ -85,7 +85,7 @@
         <Message Text="Cleaning up @(FilesToCleanup->Count()) intermediate file(s)..." Importance="High" />
         <!-- Remove unpacked files -->
         <Delete Files="@(FilesToCleanup)" TreatErrorsAsWarnings="True" />
-        <Message Text="Unpacked files cleaned up." Importance="High" />
+        <Message Text="Intermediate files cleaned up." Importance="High" />
     </Target>
 
     <!-- Helper targets -->
