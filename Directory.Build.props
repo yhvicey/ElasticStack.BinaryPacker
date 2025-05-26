@@ -1,16 +1,18 @@
 <Project>
 
-    <!-- Paths -->
-    <PropertyGroup>
-        <EnlistmentRoot>$(MSBuildThisFileDirectory)</EnlistmentRoot>
-        <PackageOutputPath>$(EnlistmentRoot)out/packages</PackageOutputPath>
-        <TaskAssemblyOutputPath>$(EnlistmentRoot)out/tasks</TaskAssemblyOutputPath>
-    </PropertyGroup>
+  <!-- Paths -->
+  <PropertyGroup>
+    <EnlistmentRoot>$(MSBuildThisFileDirectory)</EnlistmentRoot>
+    <PackageOutputPath>$(EnlistmentRoot)out/packages</PackageOutputPath>
+    <TaskAssemblyOutputPath>$(EnlistmentRoot)out/tasks</TaskAssemblyOutputPath>
+  </PropertyGroup>
 
-    <!-- Common build props -->
-    <PropertyGroup>
-        <BuildInParallel>False</BuildInParallel>
-        <NoDefaultExcludes>True</NoDefaultExcludes>
-    </PropertyGroup>
+  <!-- Common build props -->
+  <PropertyGroup>
+    <BuildInParallel>False</BuildInParallel>
+    <LangVersion>latest</LangVersion>
+    <NoDefaultExcludes>True</NoDefaultExcludes>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
 </Project>

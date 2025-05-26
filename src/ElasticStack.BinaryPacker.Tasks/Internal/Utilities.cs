@@ -74,7 +74,7 @@ namespace ElasticStack.BinaryPacker.Tasks.Internal
             Stream tarStream,
             string destinationFolder)
         {
-            var archive = TarArchive.CreateInputTarArchive(tarStream, Encoding.Unicode);
+            var archive = TarArchive.CreateInputTarArchive(tarStream, Encoding.UTF8);
             archive.ExtractContents(destinationFolder);
         }
 

@@ -39,7 +39,7 @@ variables:
   PackagesOutputFolder: $(OutputFolder)/packages
   # MSBuild-related props
   BuildConfiguration: Release
-  DotNetSdkVersion: 8.x
+  DotNetSdkVersion: 10.x
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Skip caching packages
 
 steps:
