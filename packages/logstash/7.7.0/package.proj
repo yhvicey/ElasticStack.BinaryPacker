@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.Build.NoTargets">
+
+    <PropertyGroup>
+        <BinaryPackageVersion>7.7.0</BinaryPackageVersion>
+    </PropertyGroup>
+
+</Project>
